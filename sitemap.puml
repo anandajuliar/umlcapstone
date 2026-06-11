@@ -1,0 +1,30 @@
+@startsalt
+skinparam BackgroundColor #FFFFFF
+{
+{T
+ + **[Web Mobile View] Olivia Meat N Fresh**
+ ++ Halaman Login
+ ++ Dashboard Utama (Homepage)
+ +++ Ringkasan Laba Rugi Hari Ini
+ +++ Grafik Tren Penjualan Daging
+ +++ Widget Alert Pengingat Jatuh Tempo
+ ++ Manajemen Akuntansi & Transaksi
+ ++++ Form Input Transaksi Baru
+ ++++ Riwayat Penjualan Daging
+ ++++ Halaman Laporan Laba Rugi
+ +++++ Laporan Harian
+ +++++ Laporan Bulanan
+ ++ Monitoring Piutang (Sistem Tempo)
+ ++++ Daftar Kartu Piutang Pelanggan
+ ++++ Indikator Hari Jatuh Tempo (Kuning/Merah)
+ ++++ Tombol "Tandai Lunas"
+ ++ Manajemen Retur Barang
+ ++++ Form Input Retur Baru
+ +++++ Kamera / Upload Foto Bukti Fisik Daging
+ ++++ Halaman Riwayat & Detail Retur
+ ++ Pengaturan Akun
+ ++++ Profil Owner
+ ++++ Logout
+}
+}
+@endsalt
