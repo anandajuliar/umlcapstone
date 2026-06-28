@@ -1,0 +1,92 @@
+@startuml
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <i>x</i>
+
+hide circle
+hide methods
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+Table(users, "users\n(Entitas Kuat)") {
+  primary_key(id_user) INT
+  --
+  nama VARCHAR
+  username VARCHAR
+  password VARCHAR
+  role ENUM
+}
+
+Table(pelanggan, "pelanggan\n(Entitas Kuat)") {
+  primary_key(id_pelanggan) INT
+  --
+  nama_pelanggan VARCHAR
+  no_telp VARCHAR
+  alamat TEXT
+}
+
+Table(produk, "produk\n(Entitas Kuat)") {
+  primary_key(id_produk) INT
+  --
+  nama_produk VARCHAR
+  kategori VARCHAR
+  harga_awal DECIMAL
+  harga_jual DECIMAL
+  nama_jagal VARCHAR
+}
+
+Table(pesanan, "pesanan\n(Header Transaksi)") {
+  primary_key(id_pesanan) VARCHAR
+  --
+  foreign_key(id_pelanggan) INT
+  foreign_key(id_user) INT
+  tgl_order DATE
+  tgl_dikirim DATE
+  metode_bayar ENUM
+  status_bayar ENUM
+  status_pesanan ENUM
+  total_pembayaran DECIMAL
+}
+
+Table(pesanan_detail, "pesanan_detail\n(Tabel Hasil Relasi)") {
+  primary_key(id_detail) INT
+  --
+  foreign_key(id_pesanan) VARCHAR
+  foreign_key(id_produk) INT
+  qty DECIMAL
+  harga_jual_saat_ini DECIMAL
+  subtotal DECIMAL
+}
+
+Table(piutang, "piutang\n(Entitas Lemah)") {
+  primary_key(id_piutang) INT
+  --
+  foreign_key(id_pesanan) VARCHAR
+  tgl_jatuh_tempo DATE
+  total_tagihan DECIMAL
+  jumlah_terbayar DECIMAL
+  status_piutang ENUM
+}
+
+Table(pengeluaran_harian, "pengeluaran_harian\n(Header Transaksi)") {
+  primary_key(id_pengeluaran) INT
+  --
+  foreign_key(id_user) INT
+  tgl_pengeluaran DATE
+  kategori_pengeluaran VARCHAR
+  nominal DECIMAL
+  keterangan TEXT
+}
+
+' Relasi Kardinalitas
+users "1" -- "M" pesanan : memproses >
+pelanggan "1" -- "M" pesanan : melakukan >
+pesanan "1" -- "M" pesanan_detail : memiliki >
+produk "1" -- "M" pesanan_detail : tercatat di >
+pesanan "1" -- "1" piutang : menghasilkan >
+users "1" -- "M" pengeluaran_harian : mencatat >
+
+@enduml
