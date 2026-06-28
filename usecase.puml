@@ -5,39 +5,37 @@ skinparam actorStyle awesome
 
 actor "Owner (Pemilik)" as owner
 
-rectangle "Sistem Informasi Akuntansi, Retur Barang,\ndan Monitoring Piutang Berbasis Web Mobile View" {
+rectangle "Sistem Informasi Akuntansi & Monitoring Piutang\nBerbasis Web Mobile View" {
     
-    '--- Modul Akses ---
+    '--- Akses ---
     usecase "Melakukan Login & Logout" as UC_Login
+    usecase "Mengelola Profil Akun" as UC_Profil
     
-    '--- Modul Akuntansi & Transaksi ---
-    usecase "Mencatat Transaksi Penjualan" as UC_Penjualan
+    '--- Core Fitur Master ---
+    usecase "Mengelola Data Produk Daging" as UC_Produk
+    usecase "Mengelola Data Pelanggan" as UC_Pelangan
+    
+    '--- Transaksi & Operasional ---
+    usecase "Mencatat Pesanan Baru" as UC_Pesanan
     usecase "Mencatat Metode Pembayaran\n(Tunai / Transfer / Tempo)" as UC_Bayar
-    usecase "Melihat Laporan Laba/Rugi Harian" as UC_LabaRugi
+    usecase "Mencatat Pengeluaran Harian" as UC_Pengeluaran
     
-    '--- Modul Monitoring Piutang ---
-    usecase "Melihat Daftar Piutang Pelanggan\n(Status Tempo)" as UC_Piutang
-    usecase "Memantau Hari Jatuh Tempo" as UC_NotifTempo
-    usecase "Memperbarui Status Pelunasan Piutang\n(Tandai Lunas)" as UC_StatusPiutang
-    
-    '--- Modul Retur Barang ---
-    usecase "Menginput Data Retur Barang" as UC_InputRetur
-    usecase "Mengunggah Foto Bukti Fisik Daging" as UC_FotoRetur
-    usecase "Melihat Riwayat Retur" as UC_RiwayatRetur
+    '--- Monitoring & Akuntansi ---
+    usecase "Monitoring Piutang Pelanggan\n(Status Tempo)" as UC_Piutang
+    usecase "Melihat Laporan Laba/Rugi" as UC_LabaRugi
 }
 
-'--- Hubungan Aktor ---
+'--- Hubungan Owner ---
 owner --> UC_Login
-owner --> UC_Penjualan
-owner --> UC_LabaRugi
+owner --> UC_Profil
+owner --> UC_Produk
+owner --> UC_Pelangan
+owner --> UC_Pesanan
+owner --> UC_Pengeluaran
 owner --> UC_Piutang
-owner --> UC_NotifTempo
-owner --> UC_StatusPiutang
-owner --> UC_InputRetur
-owner --> UC_RiwayatRetur
+owner --> UC_LabaRugi
 
-'--- Relasi Include ---
-UC_Penjualan ..> UC_Bayar : <<include>>
-UC_InputRetur ..> UC_FotoRetur : <<include>>
+'--- Include ---
+UC_Pesanan ..> UC_Bayar : <<include>>
 
 @enduml
