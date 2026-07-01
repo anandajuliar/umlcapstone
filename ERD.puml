@@ -1,92 +1,94 @@
 @startuml
-!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
-!define primary_key(x) <b>x</b>
-!define foreign_key(x) <i>x</i>
-
 hide circle
-hide methods
-skinparam class {
-    BackgroundColor White
-    BorderColor Black
-    ArrowColor Black
+skinparam linetype ortho
+skinparam defaultTextAlignment center
+skinparam entity {
+    BackgroundColor LightCyan
+    BorderColor DarkCyan
 }
 
-Table(users, "users\n(Entitas Kuat)") {
-  primary_key(id_user) INT
+entity "**User**" as user {
+  * id_user : int <<PK>>
   --
-  nama VARCHAR
-  username VARCHAR
-  password VARCHAR
-  role ENUM
+  nama : varchar(50)
+  username : varchar(20) <<UQ>>
+  password : varchar(255)
 }
 
-Table(pelanggan, "pelanggan\n(Entitas Kuat)") {
-  primary_key(id_pelanggan) INT
+entity "**Pelanggan**" as pelanggan {
+  * id_pelanggan : int <<PK>>
   --
-  nama_pelanggan VARCHAR
-  no_telp VARCHAR
-  alamat TEXT
+  nama_pelanggan : varchar(100)
+  no_telp : varchar(15)
+  alamat : text
 }
 
-Table(produk, "produk\n(Entitas Kuat)") {
-  primary_key(id_produk) INT
+entity "**Produk**" as produk {
+  * id_produk : int <<PK>>
   --
-  nama_produk VARCHAR
-  kategori VARCHAR
-  harga_awal DECIMAL
-  harga_jual DECIMAL
-  nama_jagal VARCHAR
+  nama_produk : varchar(100)
+  kategori : enum
+  harga_awal : int
+  harga_jual : int
+  nama_jagal : varchar(100)
 }
 
-Table(pesanan, "pesanan\n(Header Transaksi)") {
-  primary_key(id_pesanan) VARCHAR
+entity "**Pesanan**" as pesanan {
+  * id_pesanan : varchar(20) <<PK>>
   --
-  foreign_key(id_pelanggan) INT
-  foreign_key(id_user) INT
-  tgl_order DATE
-  tgl_dikirim DATE
-  metode_bayar ENUM
-  status_bayar ENUM
-  status_pesanan ENUM
-  total_pembayaran DECIMAL
+  id_pelanggan : int <<FK>>
+  id_user : int <<FK>>
+  tgl_order : date
+  metode_bayar : enum
+  status_bayar : enum
+  total_pembayaran : int
+  tgl_antar : date
 }
 
-Table(pesanan_detail, "pesanan_detail\n(Tabel Hasil Relasi)") {
-  primary_key(id_detail) INT
+entity "**Piutang**" as piutang {
+  * id_piutang : int <<PK>>
   --
-  foreign_key(id_pesanan) VARCHAR
-  foreign_key(id_produk) INT
-  qty DECIMAL
-  harga_jual_saat_ini DECIMAL
-  subtotal DECIMAL
+  id_pesanan : varchar(20) <<FK>> <<UQ>>
+  tgl_jatuh_tempo : date
+  total_tagihan : decimal(15,2)
+  jumlah_terbayar : decimal(15,2)
+  status_piutang : enum
 }
 
-Table(piutang, "piutang\n(Entitas Lemah)") {
-  primary_key(id_piutang) INT
+entity "**Pengeluaran_Harian**" as pengeluaran {
+  * id_pengeluaran : int <<PK>>
   --
-  foreign_key(id_pesanan) VARCHAR
-  tgl_jatuh_tempo DATE
-  total_tagihan DECIMAL
-  jumlah_terbayar DECIMAL
-  status_piutang ENUM
+  id_user : int <<FK>>
+  tgl_pengeluaran : date
+  kategori_pengeluaran : enum
+  nominal : int
+  keterangan : text
 }
 
-Table(pengeluaran_harian, "pengeluaran_harian\n(Header Transaksi)") {
-  primary_key(id_pengeluaran) INT
+' Tabel ini hanya muncul sebagai hasil implementasi fisik dari relasi M:N
+entity "**Tabel Hasil Relasi:\nPesanan_Detail**" as pesanan_detail #FFF3CD {
+  * id_detail : int <<PK>>
   --
-  foreign_key(id_user) INT
-  tgl_pengeluaran DATE
-  kategori_pengeluaran VARCHAR
-  nominal DECIMAL
-  keterangan TEXT
+  id_pesanan : varchar(20) <<FK>>
+  id_produk : int <<FK>>
+  qty : decimal(3,2)
+  harga_jual_saat_ini : int
+  subtotal : int
 }
 
-' Relasi Kardinalitas
-users "1" -- "M" pesanan : memproses >
-pelanggan "1" -- "M" pesanan : melakukan >
-pesanan "1" -- "M" pesanan_detail : memiliki >
-produk "1" -- "M" pesanan_detail : tercatat di >
-pesanan "1" -- "1" piutang : menghasilkan >
-users "1" -- "M" pengeluaran_harian : mencatat >
+' --- KARDINALITAS ENTITAS UTAMA ---
+
+user ||--o{ pesanan : "Mencatat\n(1:N)"
+user ||--o{ pengeluaran : "Mencatat\n(1:N)"
+pelanggan ||--o{ pesanan : "Melakukan\n(1:N)"
+
+pesanan ||--|| piutang : "Memiliki\n(1:1)"
+
+' --- RELASI MANY TO MANY (SESUAI KONSEP) ---
+pesanan }o--o{ produk : "Memuat\n(M:N)"
+
+' Garis putus-putus menunjukkan atribut ini menempel pada relasi M:N di atasnya
+pesanan_detail .up. pesanan : "<<Tabel Hasil>>"
+pesanan_detail .up. produk : "<<Tabel Hasil>>"
 
 @enduml

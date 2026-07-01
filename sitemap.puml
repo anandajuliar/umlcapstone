@@ -1,30 +1,76 @@
-@startsalt
-skinparam BackgroundColor #FFFFFF
-{
-{T
- + **[Web Mobile View] Olivia Meat N Fresh**
- ++ Halaman Login
- ++ Dashboard Utama (Homepage)
- +++ Ringkasan Finansial Hari Ini
- +++ Shortcut Catat Pesanan & Pengeluaran
- ++ Menu Pesanan
- ++++ Form Input Pesanan Baru
- ++++ Riwayat Transaksi Pesanan
- ++ Monitoring Piutang
- ++++ Daftar Piutang Pelanggan (Tempo)
- ++++ Detail Jatuh Tempo & Tombol Lunas
- ++ Menu Pengeluaran Harian
- ++++ Form Input Pengeluaran Operasional
- ++++ Log Pengeluaran Harian
- ++ Menu Daftar Produk
- ++++ Kelola Stok & Harga Daging
- ++ Menu Pelanggan
- ++++ Daftar Informasi & Kontak Pelanggan
- ++ Halaman Laporan Laba Rugi
- ++++ Grafik & Tabel Laba Rugi Harian/Bulanan
- ++ Menu Profil
- ++++ Pengaturan Akun Owner
- ++++ Logout
+@startuml
+skinparam linetype ortho
+skinparam defaultTextAlignment center
+skinparam rectangle {
+    RoundCorner 10
+    Shadowing false
 }
-}
-@endsalt
+
+' --- LEVEL 1: ROOT (PINK) ---
+rectangle "<color:white>**[Web Mobile View]**\n<color:white>Olivia Meat N Fresh" as root #D84374
+
+' --- LEVEL 2: MENU UTAMA (KUNING) ---
+rectangle "Halaman Login" as login #F7D038
+rectangle "**[Menu 1]**\nDashboard" as m1 #F7D038
+rectangle "**[Menu 2]**\nKelola Data" as m2 #F7D038
+rectangle "**[Menu 3]**\nTombol '+' (Create)" as m3 #F7D038
+rectangle "**[Menu 4]**\nKeuangan" as m4 #F7D038
+rectangle "**[Menu 5]**\nProfil" as m5 #F7D038
+
+' Hubungkan Root ke Menu Utama
+root -down-> login
+root -down-> m1
+root -down-> m2
+root -down-> m3
+root -down-> m4
+root -down-> m5
+
+' --- LEVEL 3 & 4: SUBMENU (BIRU & HIJAU) ---
+
+' Cabang Menu 1 (Berpencar dari m1)
+rectangle "Ringkasan Finansial" as m1_1 #5BB5D9
+rectangle "Notifikasi Alert" as m1_2 #5BB5D9
+rectangle "Aktivitas Terakhir" as m1_3 #5BB5D9
+m1 -down-> m1_1
+m1 -down-> m1_2
+m1 -down-> m1_3
+
+' Cabang Menu 2 (Berpencar dari m2)
+rectangle "Tab: Data Produk" as m2_1 #5BB5D9
+rectangle "Read, Update, Delete " as m2_1_1 #75C68A
+rectangle "Tab: Data Pelanggan" as m2_2 #5BB5D9
+rectangle "Read, Update, Delete" as m2_2_1 #75C68A
+m2 -down-> m2_1
+m2_1 -down-> m2_1_1
+m2 -down-> m2_2
+m2_2 -down-> m2_2_1
+
+' Cabang Menu 3 (Berpencar dari m3)
+rectangle "Form Pesanan" as m3_1 #5BB5D9
+rectangle "Form Pengeluaran" as m3_2 #5BB5D9
+rectangle "Form Produk" as m3_3 #5BB5D9
+rectangle "Form Pelanggan" as m3_4 #5BB5D9
+m3 -down-> m3_1
+m3 -down-> m3_2
+m3 -down-> m3_3
+m3 -down-> m3_4
+
+' Cabang Menu 4 (Berpencar dari m4)
+rectangle "Tab: Riwayat Transaksi" as m4_1 #5BB5D9
+rectangle "Edit & Hapus Nota" as m4_1_1 #75C68A
+rectangle "Tab: Buku Piutang" as m4_2 #5BB5D9
+rectangle "Status Tempo & Lunas" as m4_2_1 #75C68A
+rectangle "Tab: Laba Rugi" as m4_3 #5BB5D9
+m4 -down-> m4_1
+m4_1 -down-> m4_1_1
+m4 -down-> m4_2
+m4_2 -down-> m4_2_1
+m4 -down-> m4_3
+
+' Cabang Menu 5 (Berpencar dari m5)
+rectangle "Pengaturan Akun" as m5_1 #5BB5D9
+rectangle "Logout" as m5_2 #5BB5D9
+m5 -down-> m5_1
+m5 -down-> m5_2
+
+@enduml
